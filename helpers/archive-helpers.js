@@ -22,16 +22,36 @@ exports.initialize = function(pathsObj){
   });
 };
 
-// The following function names are provided to you to suggest how you might
-// modularize your code. Keep it clean!
-
-exports.readListOfUrls = function(){
+exports.readListOfUrls = function(cb){
+  // interacts with sites.txt
+  var hardList = '/Users/student/Desktop/2014-09-web-historian/archives/sites.txt';
+  fs.readFile(hardList, function(err, data){
+    if(err){
+      console.log(err);
+    }
+    var content = data.toString();
+    content = content.split('\n');
+    return cb(content);
+  });
 };
 
-exports.isUrlInList = function(){
+exports.isUrlInList = function(url, cb){
+
+  // call readListOfUrls
+  return this.readListOfUrls(function(urls){
+    for (var i = 0; i < urls.length; i++) {
+      if (url === urls[i]) {
+        return cb(true);
+      }
+    }
+    return cb(false);
+  });
+  // for loop checking url against result of above
+  // return true if exists
 };
 
 exports.addUrlToList = function(){
+  // use fs.appendFile(file, new text)
 };
 
 exports.isURLArchived = function(){

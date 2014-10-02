@@ -14,9 +14,20 @@ $(function(){
 
   $("#url").submit(function(e){
     e.preventDefault();
-    console.log("Redirecting");
-    window.location = "loading.html";
+    send($("input").val());
   });
+  var send = function(url){
+    $.ajax({
+      url: "http://127.0.0.1:8080",
+      type: 'POST',
+      data: {url: url},
+      contentType: 'application/json',
+      success: function(){
+        console.log('message sent:', url);
+        window.location = "loading.html";
+      }
+    });
+  };
 });
 </script>
 </body>

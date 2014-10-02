@@ -31,19 +31,21 @@ exports.readListOfUrls = function(cb){
     }
     var content = data.toString();
     content = content.split('\n');
-    return cb(content);
+    cb(content);
   });
 };
 
 exports.isUrlInList = function(url, cb){
 
-  return this.readListOfUrls(function(urls){
+  this.readListOfUrls(function(urls){
     for (var i = 0; i < urls.length; i++) {
-      if (url === urls[i]) {
+      console.log(urls[i].length);
+      console.log(url.length);
+      if (url.substr(0, url.length-1) === urls[i]) {
         return cb(true);
       }
     }
-    return cb(false);
+    cb(false);
   });
 };
 
@@ -51,9 +53,16 @@ exports.addUrlToList = function(pathname, cb){
   fs.appendFile(this.paths.list, pathname, cb);
 };
 
-exports.isURLArchived = function(){
-  // searches sites folder for url
-  // if not, trigger download url
+exports.isURLArchived = function(url, cb){
+  // searches sites folder for url using fs.readdir
+  return fs.readdir(this.paths.archivedSites, function(err, urls){
+    for (var i = 0; i < urls.length; i++) {
+      if (url.substr(0, url.length-1) === urls[i]) {
+        return cb(true);
+      }
+    }
+    return cb(false);
+  });
 };
 
 exports.downloadUrls = function(){

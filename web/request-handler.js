@@ -18,8 +18,10 @@ exports.handleRequest = function (req, res) {
     header.listQuery(req, res);
 
   } else if(req.method === "POST"){
-
     header.writeList(req,res);
 
+  } else if(req.method === 'OPTIONS') {
+    res.writeHead(200, header.headers);
+    res.end();
   }
 };

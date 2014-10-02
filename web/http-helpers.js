@@ -25,14 +25,15 @@ var collectData = function(request, callback) {
   request.on('end', function(){
     thisUrl = url.slice(url.indexOf('=') + 1);
     thisUrl += '\n';
+    callback(thisUrl);
   });
-  return callback(thisUrl);
 };
 
 exports.listQuery = function(req, res){
   var pathname = urlParser.parse(req.url).pathname;
   archive.isUrlInList(pathname, function(result){
     if(result){
+      // check if url is archived
       res.writeHead(200, this.headers);
       res.end(pathname);
     } else {
@@ -45,12 +46,20 @@ exports.listQuery = function(req, res){
 exports.writeList = function(req, res){
   collectData(req, function(newUrl){
     archive.isUrlInList(newUrl, function(result){
+      console.log("isUrlInList = ", result);
       if(!!result){
-        res.writeHead(200, this.headers);
-        res.end(newUrl);
+        archive.isURLArchived(newUrl, function(isArchived){
+          if (!!isArchived) {
+            // serve back archived file
+            console.log("isArchived");
+          } else {
+            res.writeHead(200, this.headers);
+            res.end(newUrl);
+          }
+        });
       } else {
         archive.addUrlToList(newUrl, function(){
-          res.writeHead(302, this.headers);
+          res.writeHead(200, this.headers);
           res.end();
         });
       }

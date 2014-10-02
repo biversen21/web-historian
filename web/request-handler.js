@@ -12,8 +12,8 @@ var collectData = function(request, callback) {
     url += chunk;
   });
   request.on('end', function(){
-    // callback(JSON.parse(url));
-    thisUrl = JSON.parse(url);
+    thisUrl = url.slice(url.indexOf('=') + 1);
+    thisUrl += '\n';
   });
   return callback(thisUrl);
 };
@@ -26,7 +26,6 @@ exports.handleRequest = function (req, res) {
     res.end('<input>');
   } else if(req.method === "GET" && !!pathname){
     // pathname = pathname.slice(1);
-    // lookup filename in sites.txt
 
     archive.isUrlInList(pathname, function(result){
       console.log('called isUrlInList');
@@ -35,19 +34,13 @@ exports.handleRequest = function (req, res) {
         res.writeHead(200, header.headers);
         res.end(pathname);
       } else {
-        console.log("About to add to list");
-        archive.addUrlToList(pathname, function(){
-          res.writeHead(302, header.headers);
-          res.end();
-        });
+        res.writeHead(404, header.headers);
+        res.end();
       }
     });
 
-    // res.end(/* archived file text? */);
   } else if(req.method === "POST"){
-    // pathname = pathname.slice(1);
 
-    // lookup filename in sites.txt
     collectData(req, function(newUrl){
       archive.isUrlInList(newUrl, function(result){
         if(!!result){
@@ -63,5 +56,5 @@ exports.handleRequest = function (req, res) {
       });
     });
   }
-  // res.end(archive.paths.list);
+
 };

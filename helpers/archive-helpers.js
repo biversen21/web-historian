@@ -37,7 +37,6 @@ exports.readListOfUrls = function(cb){
 
 exports.isUrlInList = function(url, cb){
 
-  // call readListOfUrls
   return this.readListOfUrls(function(urls){
     console.log(url, ' is the url/pathname');
     console.log(urls, 'is the array');
@@ -48,18 +47,11 @@ exports.isUrlInList = function(url, cb){
     }
     return cb(false);
   });
-  // for loop checking url against result of above
-  // return true if exists
 };
 
 exports.addUrlToList = function(pathname, cb){
   console.log("Adding ", pathname, " to list");
   fs.appendFile(this.paths.list, pathname, cb);
-    // if(err) {
-    //   console.log(err);
-    // } else {
-    //   console.log('added to file');
-    // }
 };
 
 exports.isURLArchived = function(){

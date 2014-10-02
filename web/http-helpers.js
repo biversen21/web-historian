@@ -50,8 +50,16 @@ exports.writeList = function(req, res){
       if(!!result){
         archive.isURLArchived(newUrl, function(isArchived){
           if (!!isArchived) {
+            var urlPath = '/Users/student/Desktop/2014-09-web-historian/archives/sites/' + newUrl.substr(0, newUrl.length-1);
             // serve back archived file
-            console.log("isArchived");
+            //fs.readfile gives us data, response.end(data)
+            fs.readFile(urlPath, function(err, data){
+              if(err){
+                console.log(err);
+              }
+              res.writeHead(200, this.headers);
+              res.end(data);
+            });
           } else {
             res.writeHead(200, this.headers);
             res.end(newUrl);

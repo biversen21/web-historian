@@ -15,6 +15,7 @@ exports.paths = {
   'list' : path.join(__dirname, '../archives/sites.txt')
 };
 
+// var hardList = '/Users/student/Desktop/2014-09-web-historian/archives/sites.txt';
 // Used for stubbing paths for jasmine tests, do not modify
 exports.initialize = function(pathsObj){
   _.each(pathsObj, function(path, type) {
@@ -24,8 +25,7 @@ exports.initialize = function(pathsObj){
 
 exports.readListOfUrls = function(cb){
   // interacts with sites.txt
-  var hardList = '/Users/student/Desktop/2014-09-web-historian/archives/sites.txt';
-  fs.readFile(hardList, function(err, data){
+  fs.readFile(this.paths.list, function(err, data){
     if(err){
       console.log(err);
     }
@@ -39,6 +39,8 @@ exports.isUrlInList = function(url, cb){
 
   // call readListOfUrls
   return this.readListOfUrls(function(urls){
+    console.log(url, ' is the url/pathname');
+    console.log(urls, 'is the array');
     for (var i = 0; i < urls.length; i++) {
       if (url === urls[i]) {
         return cb(true);
@@ -50,8 +52,14 @@ exports.isUrlInList = function(url, cb){
   // return true if exists
 };
 
-exports.addUrlToList = function(){
-  // use fs.appendFile(file, new text)
+exports.addUrlToList = function(pathname, cb){
+  console.log("Adding ", pathname, " to list");
+  fs.appendFile(this.paths.list, pathname, cb);
+    // if(err) {
+    //   console.log(err);
+    // } else {
+    //   console.log('added to file');
+    // }
 };
 
 exports.isURLArchived = function(){

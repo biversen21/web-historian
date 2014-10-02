@@ -38,8 +38,6 @@ exports.readListOfUrls = function(cb){
 exports.isUrlInList = function(url, cb){
 
   return this.readListOfUrls(function(urls){
-    console.log(url, ' is the url/pathname');
-    console.log(urls, 'is the array');
     for (var i = 0; i < urls.length; i++) {
       if (url === urls[i]) {
         return cb(true);
@@ -50,12 +48,14 @@ exports.isUrlInList = function(url, cb){
 };
 
 exports.addUrlToList = function(pathname, cb){
-  console.log("Adding ", pathname, " to list");
   fs.appendFile(this.paths.list, pathname, cb);
 };
 
 exports.isURLArchived = function(){
+  // searches sites folder for url
+  // if not, trigger download url
 };
 
 exports.downloadUrls = function(){
+  // downloads the url to sites folder, tells html fetcher its done
 };
